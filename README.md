@@ -7,9 +7,7 @@ Welcome to the TechJourney project! This is a simple, modular static website des
 2. [Folder Structure](#folder-structure)
 3. [How It Works](#how-it-works)
 4. [Styling](#styling)
-5. [JavaScript Functionality](#javascript-functionality)
-6. [Deployment](#deployment)
-7. [Contributing](#contributing)
+5. [Deployment](#deployment)
 
 ---
 
@@ -68,29 +66,7 @@ The website has a modular styling system with the following CSS files:
 
 ---
 
-## JavaScript Functionality
+## Deployment
 
-The JavaScript files enable the dynamic loading of the header and footer components:
-
-- **`main.js`**: Includes any general JavaScript needed for the website.
-- **`components.js`**: Handles the dynamic injection of the `header.html` and `footer.html` content.
-
-Example of the dynamic loading code in `components.js`:
-
-```javascript
-function loadHeader() {
-    fetch('header.html').then(response => response.text())
-    .then(html => document.getElementById('header-container').innerHTML = html);
-}
-
-function loadFooter() {
-    fetch('footer.html').then(response => response.text())
-    .then(html => document.getElementById('footer-container').innerHTML = html);
-}
-
-window.onload = function() {
-    loadHeader();
-    loadFooter();
-};
-
+You can host the TechJourney website on GitHub Pages for free. Just push the repository to GitHub and enable GitHub Pages in the repository settings.
 
