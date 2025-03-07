@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
     const paginationContainer = document.getElementById('pagination');
-    const perPage = 5;
+    const perPage = 10;
     let currentPage = 1;
     let vocabularyData = [];
     let totalPages = 0;
