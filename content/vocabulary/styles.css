@@ -28,16 +28,6 @@
     margin-bottom: 10px;
 }
 
-.vocabulary-card h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-}
-
-.vocabulary-card p {
-    font-size: 1rem;
-    margin: 5px 0;
-}
-
 /* Pagination Styling */
 .pagination {
     display: flex;
