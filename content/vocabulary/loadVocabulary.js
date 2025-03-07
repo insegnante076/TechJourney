@@ -1,10 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
     const paginationContainer = document.getElementById('pagination');
-    const perPage = 10;
+    const perPage = 5;
     let currentPage = 1;
     let vocabularyData = [];
     let totalPages = 0;
+
+    // Create modal structure
+    const modal = document.createElement('div');
+    modal.id = 'image-modal';
+    modal.classList.add('modal');
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span id="close-modal" class="close-btn">&times;</span>
+            <img id="modal-image" src="" alt="Large view of image" />
+        </div>
+    `;
+    document.body.appendChild(modal);
 
     // Load and parse CSV
     Papa.parse('vocabulary.csv', {
@@ -29,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const startIndex = (page - 1) * perPage;
         const endIndex = startIndex + perPage;
         const pageData = vocabularyData.slice(startIndex, endIndex);
-        
+
         vocabularyList.innerHTML = '';
         pageData.forEach(term => {
             const termCard = document.createElement('li');
@@ -37,24 +49,34 @@ document.addEventListener('DOMContentLoaded', () => {
             termCard.innerHTML = `
                 <div class="card-content">
                     <h2>${term.word}</h2>
-                    <img src="${term.image_path}" alt="${term.word}">
+                    <img src="${term.image_path}" alt="${term.word}" class="vocabulary-image">
                     <p>${term.meaning}</p>
                 </div>
             `;
             vocabularyList.appendChild(termCard);
+        });
+
+        // Add image click listener for lightbox functionality
+        const images = document.querySelectorAll('.vocabulary-image');
+        images.forEach(img => {
+            img.addEventListener('click', function () {
+                const modalImage = document.getElementById('modal-image');
+                modalImage.src = this.src;
+                modal.style.display = 'block';
+            });
         });
     }
 
     // Render pagination controls
     function renderPagination() {
         paginationContainer.innerHTML = '';
-        
+
         const prevButton = createButton('Previous', currentPage - 1, currentPage === 1);
         const nextButton = createButton('Next', currentPage + 1, currentPage === totalPages);
-        
+
         const pageInfo = document.createElement('span');
         pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
-        
+
         paginationContainer.appendChild(prevButton);
         paginationContainer.appendChild(pageInfo);
         paginationContainer.appendChild(nextButton);
@@ -66,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         button.textContent = label;
         button.classList.add('pagination-btn');
         button.disabled = isDisabled;
-        
+
         if (!isDisabled) {
             button.addEventListener('click', () => {
                 currentPage = targetPage;
@@ -74,9 +96,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderPagination();
             });
         }
-        
+
         return button;
     }
+
+    // Close the modal when the close button is clicked
+    const closeModal = document.getElementById('close-modal');
+    closeModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close the modal when clicked outside the image
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
 
     // Initial render
     renderPage(currentPage);
