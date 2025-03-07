@@ -1,25 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
-    const perPage = 5; // Number of terms per page
+    const paginationContainer = document.getElementById('pagination');
+    const perPage = 5;
     let currentPage = 1;
     let vocabularyData = [];
+    let totalPages = 0;
 
     // Load and parse CSV
     Papa.parse('vocabulary.csv', {
         download: true,
-        header: true,  // Change this to true
+        header: true,
         dynamicTyping: true,
         complete: function (results) {
             vocabularyData = results.data.map(row => ({
-                word: row.word,  // Use header names here
+                word: row.word,
                 meaning: row.meaning,
                 skill_level: row.skill_level,
                 image_path: row.image_path
             }));
+            totalPages = Math.ceil(vocabularyData.length / perPage);
             renderPage(currentPage);
+            renderPagination();
         }
     });
-    
 
     // Render vocabulary terms for the current page
     function renderPage(page) {
@@ -27,8 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const endIndex = startIndex + perPage;
         const pageData = vocabularyData.slice(startIndex, endIndex);
         
-        vocabularyList.innerHTML = ''; // Clear existing content
-
+        vocabularyList.innerHTML = '';
         pageData.forEach(term => {
             const termCard = document.createElement('li');
             termCard.classList.add('vocabulary-card');
@@ -36,42 +38,47 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="card-content">
                     <h2>${term.word}</h2>
                     <img src="${term.image_path}" alt="${term.word}">
-                    <p> ${term.meaning}</p>
+                    <p>${term.meaning}</p>
                 </div>
             `;
             vocabularyList.appendChild(termCard);
         });
-
-        renderPagination();
     }
 
-    // Render pagination buttons
+    // Render pagination controls
     function renderPagination() {
-        const totalPages = Math.ceil(vocabularyData.length / perPage);
-        let paginationHTML = '';
-
-        if (currentPage > 1) {
-            paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage - 1})">Previous</button>`;
-        }
-
-        paginationHTML += `<span>Page ${currentPage} of ${totalPages}</span>`;
-
-        if (currentPage < totalPages) {
-            paginationHTML += `<button class="pagination-btn" onclick="changePage(${currentPage + 1})">Next</button>`;
-        }
-
-        const paginationContainer = document.createElement('div');
-        paginationContainer.classList.add('pagination');
-        paginationContainer.innerHTML = paginationHTML;
-
-        document.body.appendChild(paginationContainer);
+        paginationContainer.innerHTML = '';
+        
+        const prevButton = createButton('Previous', currentPage - 1, currentPage === 1);
+        const nextButton = createButton('Next', currentPage + 1, currentPage === totalPages);
+        
+        const pageInfo = document.createElement('span');
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        
+        paginationContainer.appendChild(prevButton);
+        paginationContainer.appendChild(pageInfo);
+        paginationContainer.appendChild(nextButton);
     }
 
-    // Change the current page
-    window.changePage = function(page) {
-        if (page >= 1 && page <= Math.ceil(vocabularyData.length / perPage)) {
-            currentPage = page;
-            renderPage(currentPage);
+    // Create pagination buttons with proper attributes
+    function createButton(label, targetPage, isDisabled) {
+        const button = document.createElement('button');
+        button.textContent = label;
+        button.classList.add('pagination-btn');
+        button.disabled = isDisabled;
+        
+        if (!isDisabled) {
+            button.addEventListener('click', () => {
+                currentPage = targetPage;
+                renderPage(currentPage);
+                renderPagination();
+            });
         }
-    };
+        
+        return button;
+    }
+
+    // Initial render
+    renderPage(currentPage);
+    renderPagination();
 });
