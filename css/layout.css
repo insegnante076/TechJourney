@@ -5,6 +5,10 @@ header, footer {
     padding: 10px;
 }
 
+header h1, footer h1 {
+    color: #ffffff;
+}
+
 nav ul {
     list-style-type: none;
     margin: 0;
