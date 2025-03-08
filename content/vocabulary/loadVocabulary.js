@@ -71,11 +71,11 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPagination() {
         paginationContainer.innerHTML = '';
 
-        const prevButton = createButton('Previous', currentPage - 1, currentPage === 1);
-        const nextButton = createButton('Next', currentPage + 1, currentPage === totalPages);
+        const prevButton = createButton('Precedente', currentPage - 1, currentPage === 1);
+        const nextButton = createButton('Successiva', currentPage + 1, currentPage === totalPages);
 
         const pageInfo = document.createElement('span');
-        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+        pageInfo.textContent = `Pagina ${currentPage} di ${totalPages}`;
 
         paginationContainer.appendChild(prevButton);
         paginationContainer.appendChild(pageInfo);
