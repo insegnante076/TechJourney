@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
-    const paginationContainers = document.querySelectorAll('.pagination'); // Changed from id to class
+    const paginationContainers = document.querySelectorAll('.pagination');
     const perPage = 5;
     let currentPage = 1;
     let vocabularyData = [];
