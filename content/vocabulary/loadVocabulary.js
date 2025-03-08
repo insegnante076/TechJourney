@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
-    const paginationContainer = document.getElementById('pagination');
+    const paginationContainers = document.querySelectorAll('.pagination'); // Changed from id to class
     const perPage = 5;
     let currentPage = 1;
     let vocabularyData = [];
@@ -67,19 +67,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Render pagination controls
+    // Render pagination controls for all pagination containers
     function renderPagination() {
-        paginationContainer.innerHTML = '';
+        paginationContainers.forEach(paginationContainer => {
+            paginationContainer.innerHTML = '';
 
-        const prevButton = createButton('Precedente', currentPage - 1, currentPage === 1);
-        const nextButton = createButton('Successiva', currentPage + 1, currentPage === totalPages);
+            const prevButton = createButton('Precedente', currentPage - 1, currentPage === 1);
+            const nextButton = createButton('Successiva', currentPage + 1, currentPage === totalPages);
 
-        const pageInfo = document.createElement('span');
-        pageInfo.textContent = `Pagina ${currentPage} di ${totalPages}`;
+            const pageInfo = document.createElement('span');
+            pageInfo.textContent = `Pagina ${currentPage} di ${totalPages}`;
 
-        paginationContainer.appendChild(prevButton);
-        paginationContainer.appendChild(pageInfo);
-        paginationContainer.appendChild(nextButton);
+            paginationContainer.appendChild(prevButton);
+            paginationContainer.appendChild(pageInfo);
+            paginationContainer.appendChild(nextButton);
+        });
     }
 
     // Create pagination buttons with proper attributes
