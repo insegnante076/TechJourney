@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ridimensiona Video nel Browser</title>
+</head>
+<body>
+    <h1>Carica e ridimensiona il video</h1>
+
+    <input type="file" id="videoFile" accept="video/mp4" />
+    <button id="processButton" disabled>Ridimensiona Video</button>
+
+    <br><br>
+    <h3 id="statusMessage"></h3>
+
+    <a id="downloadLink" style="display:none;" download="video_ridimensionato.mp4">Scarica il video ridimensionato</a>
+
+    <script>
+        document.getElementById('videoFile').addEventListener('change', (event) => {
+            if (event.target.files.length > 0) {
+                document.getElementById('processButton').disabled = false;
+            }
+        });
+
+        document.getElementById('processButton').addEventListener('click', async () => {
+            const file = document.getElementById('videoFile').files[0];
+            const statusMessage = document.getElementById('statusMessage');
+            const downloadLink = document.getElementById('downloadLink');
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            statusMessage.textContent = 'Invio il video per l’elaborazione...';
+
+            // Send video to Cloudflare Worker for processing
+            const response = await fetch('https://royal-thunder-19a3.insegnante076.workers.dev/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                statusMessage.textContent = 'Errore durante l’elaborazione del video';
+                return;
+            }
+
+            // Get the processed video as a Blob
+            const processedVideoBlob = await response.blob();
+            const videoUrl = URL.createObjectURL(processedVideoBlob);
+            downloadLink.href = videoUrl;
+            downloadLink.style.display = 'block';
+
+            statusMessage.textContent = 'Elaborazione completata. Puoi scaricare il video!';
+        });
+    </script>
+</body>
+</html>
