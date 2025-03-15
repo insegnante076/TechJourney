@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const vocabularyList = document.getElementById('vocabulary-list');
     const paginationContainers = document.querySelectorAll('.pagination');
-    const perPage = 5;
+    const perPage = 6;
     let currentPage = 1;
     let vocabularyData = [];
     let totalPages = 0;
@@ -90,17 +90,20 @@ document.addEventListener('DOMContentLoaded', () => {
         button.textContent = label;
         button.classList.add('pagination-btn');
         button.disabled = isDisabled;
-
+    
         if (!isDisabled) {
             button.addEventListener('click', () => {
                 currentPage = targetPage;
                 renderPage(currentPage);
                 renderPagination();
+                
+                // Scroll to the vocabulary list
+                document.getElementById('vocabulary-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         }
-
+    
         return button;
-    }
+    } 
 
     // Close the modal when the close button is clicked
     const closeModal = document.getElementById('close-modal');
