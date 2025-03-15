@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderPagination();
                 
                 // Scroll to the vocabulary list
-                document.getElementById('vocabulary-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                document.getElementById('list-top').scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         }
     
