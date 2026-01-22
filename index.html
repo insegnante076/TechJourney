@@ -61,6 +61,21 @@
     .stop { background: #f44336; color: white; }
     .share { background: #2196f3; color: white; }
 
+    #loading {
+      display: none;
+      text-align: center;
+      font-size: 18px;
+      color: #555;
+      margin-top: 12px;
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.3; }
+      50% { opacity: 1; }
+      100% { opacity: 0.3; }
+    }
+
     @media (min-width: 700px) {
       .controls {
         flex-direction: row;
@@ -95,14 +110,18 @@
   <button class="share" onclick="share()">🔗 Condividi</button>
 </div>
 
+<p id="loading">⏳ Sto preparando la voce...</p>
+
 <script>
 let currentUtterance = null;
+let isStopping = false;
 
 /* --------- TTS --------- */
 
 function play() {
   const text = document.getElementById("text").value.trim();
   const lang = document.getElementById("language").value;
+  const loading = document.getElementById("loading");
 
   if (!text) {
     alert("Scrivi qualcosa da ascoltare 🙂");
@@ -110,16 +129,35 @@ function play() {
   }
 
   speechSynthesis.cancel();
+  isStopping = false;
+  loading.style.display = "block";
 
   currentUtterance = new SpeechSynthesisUtterance(text);
   currentUtterance.lang = lang;
+
+  currentUtterance.onstart = () => {
+    loading.style.display = "none";
+  };
+
+  currentUtterance.onend = () => {
+    loading.style.display = "none";
+  };
+
+  currentUtterance.onerror = () => {
+    loading.style.display = "none";
+    if (!isStopping) {
+      alert("Ops! C'è stato un piccolo problema con l'audio 😕");
+    }
+  };
 
   speechSynthesis.speak(currentUtterance);
 }
 
 function stop() {
+  isStopping = true;
   speechSynthesis.cancel();
   currentUtterance = null;
+  document.getElementById("loading").style.display = "none";
 }
 
 /* --------- URL PARAMS --------- */
@@ -148,11 +186,7 @@ function share() {
     return;
   }
 
-  const params = new URLSearchParams({
-    text,
-    lang
-  });
-
+  const params = new URLSearchParams({ text, lang });
   const url = `${location.origin}${location.pathname}?${params.toString()}`;
 
   navigator.clipboard.writeText(url).then(() => {
