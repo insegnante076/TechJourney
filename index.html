@@ -114,7 +114,6 @@
 
 <script>
 let currentUtterance = null;
-let isStopping = false;
 
 /* --------- TTS --------- */
 
@@ -128,8 +127,8 @@ function play() {
     return;
   }
 
+  // Interrompe eventuale voce precedente (NON è un errore)
   speechSynthesis.cancel();
-  isStopping = false;
   loading.style.display = "block";
 
   currentUtterance = new SpeechSynthesisUtterance(text);
@@ -143,18 +142,21 @@ function play() {
     loading.style.display = "none";
   };
 
-  currentUtterance.onerror = () => {
+  currentUtterance.onerror = (event) => {
     loading.style.display = "none";
-    if (!isStopping) {
-      alert("Ops! C'è stato un piccolo problema con l'audio 😕");
+
+    // Ignora cancellazioni/interruzioni volontarie
+    if (event.error === "canceled" || event.error === "interrupted") {
+      return;
     }
+
+    alert("Ops! C'è stato un piccolo problema con l'audio 😕");
   };
 
   speechSynthesis.speak(currentUtterance);
 }
 
 function stop() {
-  isStopping = true;
   speechSynthesis.cancel();
   currentUtterance = null;
   document.getElementById("loading").style.display = "none";
