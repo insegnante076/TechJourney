@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Text to Speech</title>
+  <title>Leggimi il testo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
@@ -11,10 +11,12 @@
       max-width: 900px;
       margin: 20px auto;
       padding: 0 12px;
+      background: #fffdf7;
     }
 
     h1 {
       text-align: center;
+      color: #333;
     }
 
     textarea {
@@ -23,6 +25,8 @@
       font-size: 18px;
       padding: 12px;
       box-sizing: border-box;
+      border-radius: 8px;
+      border: 2px solid #ddd;
     }
 
     label {
@@ -35,6 +39,7 @@
       font-size: 18px;
       padding: 10px;
       margin-top: 6px;
+      border-radius: 8px;
     }
 
     .controls {
@@ -47,7 +52,7 @@
     button {
       font-size: 18px;
       padding: 14px;
-      border-radius: 8px;
+      border-radius: 12px;
       border: none;
       cursor: pointer;
     }
@@ -70,24 +75,24 @@
 </head>
 <body>
 
-<h1>Text to Speech</h1>
+<h1>📖 Leggimi il testo!</h1>
 
-<textarea id="text" placeholder="Paste your text here..."></textarea>
+<textarea id="text" placeholder="Scrivi o incolla qui il testo da ascoltare... 😊"></textarea>
 
 <br><br>
 
-<label for="language">Language</label>
+<label for="language">🌍 Scegli la lingua</label>
 <select id="language">
-  <option value="en-US">English</option>
-  <option value="es-ES">Spanish</option>
-  <option value="it-IT">Italian</option>
-  <option value="fr-FR">French</option>
+  <option value="it-IT">Italiano</option>
+  <option value="en-US">Inglese</option>
+  <option value="es-ES">Spagnolo</option>
+  <option value="fr-FR">Francese</option>
 </select>
 
 <div class="controls">
-  <button class="play" onclick="play()">▶ Play</button>
-  <button class="stop" onclick="stop()">⏹ Stop</button>
-  <button class="share" onclick="share()">🔗 Share</button>
+  <button class="play" onclick="play()">▶️ Ascolta</button>
+  <button class="stop" onclick="stop()">⏹️ Ferma</button>
+  <button class="share" onclick="share()">🔗 Condividi</button>
 </div>
 
 <script>
@@ -100,7 +105,7 @@ function play() {
   const lang = document.getElementById("language").value;
 
   if (!text) {
-    alert("Enter text first");
+    alert("Scrivi qualcosa da ascoltare 🙂");
     return;
   }
 
@@ -139,7 +144,7 @@ function share() {
   const lang = document.getElementById("language").value;
 
   if (!text) {
-    alert("Nothing to share");
+    alert("Non c'è nulla da condividere 😅");
     return;
   }
 
@@ -151,7 +156,7 @@ function share() {
   const url = `${location.origin}${location.pathname}?${params.toString()}`;
 
   navigator.clipboard.writeText(url).then(() => {
-    alert("Link copied to clipboard!");
+    alert("Link copiato! Puoi condividerlo 📎");
   });
 }
 
